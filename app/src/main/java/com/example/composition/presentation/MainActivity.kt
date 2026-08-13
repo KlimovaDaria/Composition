@@ -1,47 +1,41 @@
 package com.example.composition.presentation
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.composition.ui.theme.CompositionTheme
+import androidx.appcompat.app.AppCompatActivity
+import com.example.composition.R
+import com.example.composition.presentation.GameFragment.OnButtonOptionClickListener
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity(),
+    WelcomeFragment.OnButtonUnderstandClickListener,
+ChooseLevelFragment.OnButtonLevelClickListener,
+    OnButtonOptionClickListener{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            CompositionTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
-        }
+        setContentView(R.layout.activity_main)
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.main_container, WelcomeFragment())
+            .commit()
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+    override fun onButtonUnderstandClick() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.main_container, ChooseLevelFragment())
+            .commit()
+    }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    CompositionTheme {
-        Greeting("Android")
+    override fun OnButtonLevelClick() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.main_container, GameFragment())
+            .commit()
+    }
+
+    override fun onButtonOptionClick() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.main_container, GameFinishedFragment())
+            .commit()
     }
 }
