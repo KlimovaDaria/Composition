@@ -1,21 +1,25 @@
 package com.example.composition.presentation
+
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
-import com.example.composition.R
 import androidx.fragment.app.Fragment
+import com.example.composition.R
+import com.example.composition.databinding.FragmentWelcomeBinding
 
 class WelcomeFragment : Fragment() {
     private lateinit var onButtonUnderstandClickListener: OnButtonUnderstandClickListener
+    private var _binding: FragmentWelcomeBinding? = null
+
+    private val binding: FragmentWelcomeBinding
+        get() = _binding ?: throw RuntimeException("FragmentWelcomeBinding==null")
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is OnButtonUnderstandClickListener){
+        if (context is OnButtonUnderstandClickListener) {
             onButtonUnderstandClickListener = context
-        }
-        else {
+        } else {
             throw RuntimeException("Activity must implement OnButtonUnderstandClickListener")
         }
     }
@@ -24,8 +28,9 @@ class WelcomeFragment : Fragment() {
         inflater: android.view.LayoutInflater,
         container: android.view.ViewGroup?,
         savedInstanceState: android.os.Bundle?
-    ): android.view.View? {
-        return inflater.inflate(com.example.composition.R.layout.fragment_welcome, container, false)
+    ): View {
+        _binding = FragmentWelcomeBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -36,7 +41,12 @@ class WelcomeFragment : Fragment() {
         }
     }
 
-    interface OnButtonUnderstandClickListener{
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    interface OnButtonUnderstandClickListener {
         fun onButtonUnderstandClick()
     }
 }
