@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="26dp"
         android:layout_marginEnd="26dp"
-        android:text="@string/str_easy_level"
+        android:text="@string/str_normal_level"
         android:backgroundTint="@android:color/holo_orange_light"/>
 
     <Button
@@ -48,6 +48,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="26dp"
         android:layout_marginEnd="26dp"
-        android:text="@string/str_easy_level"
+        android:text="@string/str_hard_level"
         android:backgroundTint="@android:color/holo_red_light"/>
 </LinearLayout>

@@ -1,30 +1,19 @@
 package com.example.composition.presentation
 
-import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import androidx.fragment.app.Fragment
 import com.example.composition.R
 import com.example.composition.databinding.FragmentChooseLevelBinding
+import com.example.composition.domain.entity.Level
 
 
 class ChooseLevelFragment : Fragment() {
-    private lateinit var onButtonLevelClickListener: OnButtonLevelClickListener
     private var _binding: FragmentChooseLevelBinding? = null
     private val binding: FragmentChooseLevelBinding
-        get() = _binding?: throw RuntimeException("FragmentChooseLevelBinding == null")
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnButtonLevelClickListener) {
-            onButtonLevelClickListener = context
-        } else {
-            throw RuntimeException("Activity must implement OnButtonLevelClickListener")
-        }
-    }
+        get() = _binding ?: throw RuntimeException("FragmentChooseLevelBinding == null")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,16 +22,26 @@ class ChooseLevelFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentChooseLevelBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val btnTestLevel = view.findViewById<Button>(R.id.btn_choose_test_level)
-        btnTestLevel.setOnClickListener {
-            onButtonLevelClickListener.OnButtonLevelClick()
+        with(binding){
+            btnChooseTestLevel.setOnClickListener {
+                launchGameFragment(Level.TEST)
+            }
+            btnChooseEasyLevel.setOnClickListener {
+                launchGameFragment(Level.EASY)
+            }
+            btnChooseNormalLevel.setOnClickListener {
+                launchGameFragment(Level.NORMAL)
+            }
+            btnChooseHardLevel.setOnClickListener {
+                launchGameFragment(Level.HARD)
+            }
         }
     }
 
@@ -51,7 +50,19 @@ class ChooseLevelFragment : Fragment() {
         _binding = null
     }
 
-    interface OnButtonLevelClickListener {
-        fun OnButtonLevelClick()
+    private fun launchGameFragment(level: Level) {
+        requireActivity().supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.main_container, GameFragment.newInstance(level))
+            .addToBackStack(GameFragment.NAME)
+            .commit()
+    }
+
+
+    companion object {
+        const val NAME = "ChooseLevelFragment"
+        fun newInstance(): ChooseLevelFragment {
+            return ChooseLevelFragment()
+        }
     }
 }
