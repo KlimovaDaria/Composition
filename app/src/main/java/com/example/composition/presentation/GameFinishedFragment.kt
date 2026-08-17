@@ -43,6 +43,9 @@ class GameFinishedFragment : Fragment() {
             viewLifecycleOwner,
             callback
         )
+        binding.buttonRetry.setOnClickListener {
+            retryGame()
+        }
     }
 
     override fun onDestroyView() {
@@ -51,7 +54,9 @@ class GameFinishedFragment : Fragment() {
     }
 
     private fun parseParams() {
-        gameResult = requireArguments().getSerializable(GAME_RESULTS) as GameResult
+        requireArguments().getParcelable<GameResult>(KEY_GAME_RESULTS)?.let {
+            gameResult = it
+        }
     }
 
     private fun retryGame() {
@@ -62,11 +67,11 @@ class GameFinishedFragment : Fragment() {
     }
 
     companion object {
-        private const val GAME_RESULTS = "game_results"
+        private const val KEY_GAME_RESULTS = "game_results"
         fun newInstance(gameResult: GameResult): GameFinishedFragment {
             return GameFinishedFragment().apply {
                 arguments = Bundle().apply {
-                    putSerializable(GAME_RESULTS, gameResult)
+                    putParcelable(KEY_GAME_RESULTS, gameResult)
                 }
             }
         }

@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.composition"
-        minSdk = 27
+        minSdk = 33
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -55,4 +55,10 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
     implementation("com.google.android.material:material:1.14.0")
+
+}
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.addAll("-Xplugin=parcelize")
+    }
 }
