@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.composition.databinding.FragmentGameBinding
 import com.example.composition.domain.entity.GameResult
 import com.example.composition.domain.entity.GameSettings
@@ -18,6 +19,8 @@ class GameFragment : Fragment() {
     private var _binding: FragmentGameBinding? = null
     private val binding: FragmentGameBinding
         get() = _binding ?: throw RuntimeException("FragmentGameBinding==null")
+
+    private lateinit var gameFragmentViewModel: GameFragmentViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +38,12 @@ class GameFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        gameFragmentViewModel = ViewModelProvider(this,
+            ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
+        )[GameFragmentViewModel::class.java]
+        observeViewModel()
         val btnOption1 = binding.tvOption1
+        gameFragmentViewModel.startGame(level)
         btnOption1.setOnClickListener {
             val gameResult = GameResult(true, 10, 10,
                 GameSettings(10,7,70,10))
@@ -61,6 +69,25 @@ class GameFragment : Fragment() {
             .addToBackStack(null)
             .commit()
     }
+
+    private fun observeViewModel(){
+        gameFragmentViewModel.questionLD.observe(viewLifecycleOwner){
+            val sum = it.sum
+            val options = it.options
+            val visibleNumber = it.visibleNumber
+            binding.tvSum.apply {
+                text = sum.toString()
+            }
+            binding.tvLeftNumber.apply {
+                text = visibleNumber.toString()
+            }
+        }
+        gameFragmentViewModel.timerStrLD.observe(viewLifecycleOwner){
+            binding.tvTimer.text = it
+        }
+    }
+
+
 
     companion object {
         private const val KEY_LEVEL = "level"
