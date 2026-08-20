@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.example.composition.R
 import com.example.composition.databinding.FragmentGameFinishedBinding
 import com.example.composition.domain.entity.GameResult
 
@@ -33,11 +34,15 @@ class GameFinishedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setOnClickListeners()
+        setViews()
+    }
+
+    private fun setOnClickListeners() {
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 retryGame()
             }
-
         }
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
@@ -48,9 +53,39 @@ class GameFinishedFragment : Fragment() {
         }
     }
 
+    private fun setViews() {
+        with(binding) {
+            tvRequiredAnswers.text = String.format(
+                getString(R.string.required_score),
+                gameResult.gameSettings.minCountOfRightAnswers
+            )
+            tvScoreAnswers.text = String.format(
+                getString(R.string.score_answers),
+                gameResult.countOfRightAnswers
+            )
+            tvRequiredPercentage.text = String.format(
+                getString(R.string.required_percentage),
+                gameResult.gameSettings.minPercentOfRightAnswers
+            )
+           tvScorePercentage.text = String.format(
+                getString(R.string.score_percentage),
+                ((gameResult.countOfRightAnswers * 1.00 / gameResult.countOfAnswers) * 100).toInt()
+            )
+            binding.emojiResult.setImageResource(getSmileResId())
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun getSmileResId(): Int {
+        return if (gameResult.winner) {
+            R.drawable.ic_smile
+        } else {
+            R.drawable.ic_sad
+        }
     }
 
     private fun parseParams() {
