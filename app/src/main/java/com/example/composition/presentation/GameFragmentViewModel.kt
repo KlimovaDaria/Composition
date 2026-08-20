@@ -52,7 +52,7 @@ class GameFragmentViewModel(application: Application) : AndroidViewModel(applica
 
     private val _enoughPercentsOfRightAnswersLD = MutableLiveData<Boolean>()
     val enoughPercentsOfRightAnswersLD: LiveData<Boolean>
-        get() = _enoughCountOfRightAnswersLD
+        get() = _enoughPercentsOfRightAnswersLD
 
     private val _minPercentLD = MutableLiveData<Int>()
     val minPercentLD: LiveData<Int>
@@ -66,6 +66,7 @@ class GameFragmentViewModel(application: Application) : AndroidViewModel(applica
         getGameSettings(level)
         generateQuestion()
         startTimer()
+        updateProgress()
     }
 
     private fun getGameSettings(level: Level) {
@@ -139,6 +140,7 @@ class GameFragmentViewModel(application: Application) : AndroidViewModel(applica
     }
 
     private fun calcPercentOfRightAnswers(): Int {
+        if (countOfQuestions==0) return 0
         return (countOfRightAnswer.toDouble() / countOfQuestions * 100).toInt()
     }
 

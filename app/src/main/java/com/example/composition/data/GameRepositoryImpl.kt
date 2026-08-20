@@ -29,7 +29,7 @@ class GameRepositoryImpl : GameRepository {
             val item = Random.nextInt(from, to + 1)
             options.add(item)
         }
-        return Question(sum, visibleNumber, options.toList())
+        return Question(sum, visibleNumber, options.toList().sorted())
     }
 
     override fun getGameSettings(level: Level): GameSettings {
