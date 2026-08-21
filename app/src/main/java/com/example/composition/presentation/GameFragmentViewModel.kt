@@ -6,6 +6,7 @@ import android.os.CountDownTimer
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.example.composition.R
 import com.example.composition.data.GameRepositoryImpl
 import com.example.composition.domain.entity.GameResult
@@ -16,14 +17,12 @@ import com.example.composition.domain.usecases.GenerateQuestionUseCase
 import com.example.composition.domain.usecases.GetGameSettingsUseCase
 
 
-class GameFragmentViewModel(application: Application) : AndroidViewModel(application) {
+class GameFragmentViewModel(val application: Application, val level: Level) : ViewModel() {
     private val repo = GameRepositoryImpl()
     private val generateQuestionUseCase = GenerateQuestionUseCase(repo)
     private val getGameSettingsUseCase = GetGameSettingsUseCase(repo)
-    private val context = application
 
     private lateinit var gameSettings: GameSettings
-    private lateinit var level: Level
 
     private val _questionLD = MutableLiveData<Question>()
     val questionLD: LiveData<Question>
@@ -62,16 +61,18 @@ class GameFragmentViewModel(application: Application) : AndroidViewModel(applica
     val gameResultLD: LiveData<GameResult>
         get() = _gameResultLD
 
-    fun startGame(level: Level) {
-        getGameSettings(level)
+    init {
+        startGame()
+    }
+    private fun startGame() {
+        getGameSettings()
         generateQuestion()
         startTimer()
         updateProgress()
     }
 
-    private fun getGameSettings(level: Level) {
+    private fun getGameSettings() {
         this.gameSettings = getGameSettingsUseCase(level)
-        this.level = level
         _minPercentLD.value = gameSettings.minPercentOfRightAnswers
     }
 
@@ -130,7 +131,7 @@ class GameFragmentViewModel(application: Application) : AndroidViewModel(applica
         val percent = calcPercentOfRightAnswers()
         _percentOfRightAnswersLD.value = percent
         _progressAnswersLD.value = String.format(
-            context.resources.getString(R.string.right_answers),
+            application.resources.getString(R.string.right_answers),
             countOfRightAnswer,
             gameSettings.minCountOfRightAnswers
         )
