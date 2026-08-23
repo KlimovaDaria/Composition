@@ -5,6 +5,7 @@ plugins {
 
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.androidx.navigation.safeargs) apply false
+    alias(libs.plugins.legacy.kapt) apply false
 }
 buildscript {
     repositories {

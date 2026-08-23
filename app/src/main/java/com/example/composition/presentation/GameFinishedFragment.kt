@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.composition.R
 import com.example.composition.databinding.FragmentGameFinishedBinding
 
 class GameFinishedFragment : Fragment() {
@@ -28,7 +27,7 @@ class GameFinishedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setOnClickListeners()
-        setViews()
+        binding.gameResult = args.gameResult
     }
 
     private fun setOnClickListeners() {
@@ -37,42 +36,9 @@ class GameFinishedFragment : Fragment() {
         }
     }
 
-    private fun setViews() {
-        with(binding) {
-            val gameResult = args.gameResults
-            tvRequiredAnswers.text = String.format(
-                getString(R.string.required_score),
-                gameResult.gameSettings.minCountOfRightAnswers
-            )
-            tvScoreAnswers.text = String.format(
-                getString(R.string.score_answers),
-                gameResult.countOfRightAnswers
-            )
-            tvRequiredPercentage.text = String.format(
-                getString(R.string.required_percentage),
-                gameResult.gameSettings.minPercentOfRightAnswers
-            )
-           tvScorePercentage.text = String.format(
-                getString(R.string.score_percentage),
-                ((gameResult.countOfRightAnswers * 1.00 / gameResult.countOfAnswers) * 100).toInt()
-            )
-            binding.emojiResult.setImageResource(getSmileResId())
-        }
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun getSmileResId(): Int {
-        with(args.gameResults) {
-            return if (winner) {
-                R.drawable.ic_smile
-            } else {
-                R.drawable.ic_sad
-            }
-        }
     }
 
     private fun retryGame() {

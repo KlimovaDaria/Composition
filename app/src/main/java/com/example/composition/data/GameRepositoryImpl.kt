@@ -6,9 +6,7 @@ import com.example.composition.domain.entity.Question
 import com.example.composition.domain.repository.GameRepository
 import kotlin.random.Random
 
-
 class GameRepositoryImpl : GameRepository {
-
     private companion object {
         const val MIN_SUM_VALUE = 2
         const val MIN_VISIBLE_VALUE = 1

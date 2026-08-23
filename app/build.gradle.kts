@@ -1,12 +1,12 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
-    // Подключаем Parcelize через встроенный alias Kotlin, чтобы не было ошибки "Cannot add extension"
-    alias(libs.plugins.kotlin.android) apply false
+
     kotlin("plugin.serialization") version "2.0.21"
 
     // Подключаем Safe Args через id() строго в самом конце блока
     id("androidx.navigation.safeargs")
+    alias(libs.plugins.legacy.kapt)
 
 }
 
@@ -39,7 +39,7 @@ android {
     }
     buildFeatures {
         compose = true
-        viewBinding = true
+        dataBinding = true
     }
 }
 

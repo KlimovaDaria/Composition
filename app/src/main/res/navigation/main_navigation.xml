@@ -42,7 +42,7 @@
         android:label="fragment_game_finished"
         tools:layout="@layout/fragment_game_finished" >
         <argument
-            android:name="game_results"
+            android:name="gameResult"
             app:argType="com.example.composition.domain.entity.GameResult" />
     </fragment>
 </navigation>
